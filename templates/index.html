@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Password Strength Tool</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+
+<div class="main-container">
+    <h1>Password Strength Tool</h1>
+
+    <div class="content-wrapper">
+        <!-- Password Generator Section -->
+        <div class="section generator">
+            <h2>Random Password Generator</h2>
+            <label for="lengthRange">Select Password Length: <span id="lengthValue">12</span></label>
+            <input type="range" id="lengthRange" min="8" max="32" value="12" oninput="updateLengthValue()">
+            <button class="btn generate-btn" onclick="generatePassword()">Generate Password</button>
+            <input type="text" id="generatedPassword" readonly>
+            <button class="btn copy-btn" onclick="copyToClipboard()">Copy to Clipboard</button>
+        </div>
+
+        <!-- Password Strength Analyzer Section -->
+        <div class="section analyzer">
+            <h2>Password Strength Analyzer</h2>
+            <input type="password" id="password" placeholder="Enter or Paste your password" oninput="checkPassword()">
+            <progress id="strengthMeter" value="0" max="5"></progress>
+            <div class="result" id="result"></div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function checkPassword() {
+        const password = document.getElementById("password").value;
+        const resultDiv = document.getElementById("result");
+        const strengthMeter = document.getElementById("strengthMeter");
+
+        fetch('/check-password', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ password: password }),
+        })
+        .then(response => response.json())
+        .then(data => {
+            const result = data.result;
+            resultDiv.textContent = result;
+
+            let strength = 0;
+            let suggestions = [];
+
+            if (password.length >= 8) {
+                strength += 1;
+            } else {
+                suggestions.push("Password should be at least 8 characters long.");
+            }
+
+            if (/[a-z]/.test(password) && /[A-Z]/.test(password)) {
+                strength += 1;
+            } else {
+                suggestions.push("Include both lowercase and uppercase letters.");
+            }
+
+            if (/[0-9]/.test(password)) {
+                strength += 1;
+            } else {
+                suggestions.push("Include at least one number.");
+            }
+
+            if (/[!@#$%^&*(),.?\":{}|<>]/.test(password)) {
+                strength += 1;
+            } else {
+                suggestions.push("Add at least one special character.");
+            }
+
+            if (password.length >= 12 && strength === 4) {
+                strength += 1; // Super Strong level
+            }
+
+            strengthMeter.value = strength;
+
+            if (strength < 3) {
+                resultDiv.textContent = "Weak: " + suggestions.join(" ");
+                resultDiv.className = "result weak";
+            } else if (strength === 3) {
+                resultDiv.textContent = "Medium Strength";
+                resultDiv.className = "result medium";
+            } else if (strength === 4) {
+                resultDiv.textContent = "Strong Password!";
+                resultDiv.className = "result strong";
+            } else if (strength === 5) {
+                resultDiv.textContent = "Super Strong Password!";
+                resultDiv.className = "result super-strong";
+            }
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+        });
+    }
+
+    function updateLengthValue() {
+        const length = document.getElementById("lengthRange").value;
+        document.getElementById("lengthValue").textContent = length;
+    }
+
+    function generatePassword() {
+        const length = document.getElementById("lengthRange").value;
+        const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*(),.?\":{}|<>';
+        let password = '';
+
+        for (let i = 0; i < length; i++) {
+            password += characters.charAt(Math.floor(Math.random() * characters.length));
+        }
+
+        const generatedPasswordField = document.getElementById("generatedPassword");
+        generatedPasswordField.value = password;
+
+        document.getElementById("password").value = password;
+        checkPassword();
+    }
+
+    function copyToClipboard() {
+        const passwordField = document.getElementById("generatedPassword");
+        passwordField.select();
+        passwordField.setSelectionRange(0, 99999);
+        document.execCommand("copy");
+        alert("Password copied to clipboard!");
+    }
+</script>
+
+</body>
+</html>

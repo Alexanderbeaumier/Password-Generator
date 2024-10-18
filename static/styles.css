@@ -1,0 +1,129 @@
+/* Apply the Roboto font from Google Fonts */
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: #f4f4f4;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+.main-container {
+    width: 900px;
+    background-color: #ffffff;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+h1 {
+    font-weight: 700;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+h2 {
+    font-weight: 500;
+    color: #444;
+    margin-bottom: 15px;
+}
+
+/* Flexbox container for side-by-side layout */
+.content-wrapper {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.section {
+    flex: 1;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    border: 1px solid #e0e0e0;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.05);
+}
+
+input[type="password"], input[type="text"], button, input[type="range"] {
+    width: 100%;
+    max-width: 300px;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 16px;
+    transition: all 0.3s ease;
+}
+
+input[type="text"] {
+    background-color: #f0f0f0;
+    cursor: not-allowed;
+}
+
+.btn {
+    cursor: pointer;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 5px;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+    max-width: 300px;
+}
+
+.btn:hover {
+    background-color: #0056b3;
+}
+
+.copy-btn {
+    background-color: #28a745;
+}
+
+.copy-btn:hover {
+    background-color: #218838;
+}
+
+.result {
+    margin-top: 15px;
+    text-align: center;
+    font-weight: bold;
+    font-size: 16px;
+}
+
+.weak {
+    color: #e74c3c;
+}
+
+.medium {
+    color: #e67e22;
+}
+
+.strong {
+    color: #2ecc71;
+}
+
+.super-strong {
+    color: #3498db;
+}
+
+progress {
+    width: 100%;
+    max-width: 300px;
+    height: 20px;
+    border-radius: 10px;
+    background-color: #f0f0f0;
+    border: 1px solid #ddd;
+    margin-bottom: 15px;
+}
+
+progress[value]::-webkit-progress-value {
+    background-color: #2ecc71;
+}
+
+progress::-webkit-progress-bar {
+    background-color: #eee;
+    border-radius: 10px;
+}
